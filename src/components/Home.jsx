@@ -3,8 +3,132 @@ import SmartToyIcon from '@mui/icons-material/SmartToy'
 import SpeedIcon from '@mui/icons-material/Speed'
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import AddIcon from '@mui/icons-material/Add'
+import { SignInButton, UserButton, useUser } from '@clerk/clerk-react'
 
 const Home = () => {
+  const { isSignedIn, user } = useUser()
+
+  if (isSignedIn) {
+    return (
+      <Box sx={{ 
+        background: '#1e1e1e',
+        minHeight: '100vh',
+        color: '#d4d4d4',
+        position: 'relative',
+        fontFamily: '"DM Sans", -apple-system, BlinkMacSystemFont, sans-serif',
+      }}>
+        {/* DASHBOARD NAVBAR */}
+        <AppBar 
+          position="sticky" 
+          elevation={0}
+          sx={{ 
+            background: '#252526',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+          }}
+        >
+          <Container maxWidth="xl">
+            <Toolbar sx={{ py: 1.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mr: 4 }}>
+                <Box sx={{ 
+                  background: '#007acc',
+                  borderRadius: '8px',
+                  p: 0.8,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 12px rgba(0,122,204,0.25)'
+                }}>
+                  <SmartToyIcon sx={{ fontSize: 26, color: '#fff' }} />
+                </Box>
+                <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '22px', letterSpacing: '-0.5px', color: '#d4d4d4' }}>
+                  AI Ticketing
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, flexGrow: 1 }}>
+                <Typography sx={{ cursor: 'pointer', fontWeight: 500, '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}>
+                  Knowledge Bases
+                </Typography>
+                <Typography sx={{ cursor: 'pointer', fontWeight: 500, '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}>
+                  Tickets
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Typography sx={{ fontWeight: 500, color: '#d4d4d4' }}>
+                  {user?.fullName || user?.primaryEmailAddress?.emailAddress || 'User'}
+                </Typography>
+                <UserButton 
+                  appearance={{
+                    elements: {
+                      avatarBox: { width: '40px', height: '40px' }
+                    }
+                  }}
+                />
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
+
+        {/* DASHBOARD CONTENT */}
+        <Container maxWidth="xl" sx={{ mt: 6 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+            <Typography variant="h4" sx={{ fontWeight: 700, color: '#e6e6e6' }}>
+              Dashboard
+            </Typography>
+            <Button 
+              variant="contained" 
+              startIcon={<AddIcon />}
+              sx={{ 
+                background: '#007acc',
+                color: '#fff',
+                px: 3,
+                py: 1.2,
+                borderRadius: '8px',
+                fontWeight: 600,
+                textTransform: 'none',
+                boxShadow: '0 4px 14px rgba(0,122,204,0.3)',
+                transition: 'all 0.3s ease',
+                '&:hover': { background: '#005a9e', transform: 'translateY(-2px)' }
+              }}
+            >
+              Create Ticket
+            </Button>
+          </Box>
+          
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={4}>
+               <Card sx={{ background: '#252526', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.2)' }}>
+                 <CardContent sx={{ p: 4 }}>
+                   <Typography sx={{ color: 'rgba(255,255,255,0.6)', mb: 1, fontWeight: 500 }}>Open Tickets</Typography>
+                   <Typography variant="h3" sx={{ color: '#fff', fontWeight: 700 }}>0</Typography>
+                 </CardContent>
+               </Card>
+            </Grid>
+            <Grid item xs={12} md={4}>
+               <Card sx={{ background: '#252526', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.2)' }}>
+                 <CardContent sx={{ p: 4 }}>
+                   <Typography sx={{ color: 'rgba(255,255,255,0.6)', mb: 1, fontWeight: 500 }}>Resolved</Typography>
+                   <Typography variant="h3" sx={{ color: '#fff', fontWeight: 700 }}>0</Typography>
+                 </CardContent>
+               </Card>
+            </Grid>
+            <Grid item xs={12} md={4}>
+               {/* <Card sx={{ background: '#252526', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.2)' }}>
+                 <CardContent sx={{ p: 4 }}>
+                   <Typography sx={{ color: 'rgba(255,255,255,0.6)', mb: 1, fontWeight: 500 }}>Knowledge Bases</Typography>
+                   <Typography variant="h3" sx={{ color: '#fff', fontWeight: 700 }}>0</Typography>
+                 </CardContent>
+               </Card> */}
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+    )
+  }
+
   return (
     <Box sx={{ 
       background: '#1e1e1e',
@@ -51,28 +175,43 @@ const Home = () => {
                 AI Ticketing
               </Typography>
             </Box>
-            <Button 
-              variant="outlined" 
-              sx={{ 
-                color: '#d4d4d4',
-                borderColor: 'rgba(212,212,212,0.08)',
-                borderRadius: '10px',
-                px: 3,
-                py: 1,
-                textTransform: 'none',
-                fontSize: '15px',
-                fontWeight: 600,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  borderColor: '#007acc',
-                  background: 'rgba(0,122,204,0.08)',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 8px 20px rgba(0,122,204,0.12)'
-                }
-              }}
-            >
-              Login
-            </Button>
+            {isSignedIn ? (
+              <UserButton 
+                appearance={{
+                  elements: {
+                    avatarBox: {
+                      width: '40px',
+                      height: '40px',
+                    }
+                  }
+                }}
+              />
+            ) : (
+              <SignInButton mode="modal">
+                <Button 
+                  variant="outlined" 
+                  sx={{ 
+                    color: '#d4d4d4',
+                    borderColor: 'rgba(212,212,212,0.08)',
+                    borderRadius: '10px',
+                    px: 3,
+                    py: 1,
+                    textTransform: 'none',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      borderColor: '#007acc',
+                      background: 'rgba(0,122,204,0.08)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 8px 20px rgba(0,122,204,0.12)'
+                    }
+                  }}
+                >
+                  Login
+                </Button>
+              </SignInButton>
+            )}
           </Toolbar>
         </Container>
       </AppBar>
@@ -163,28 +302,30 @@ const Home = () => {
             justifyContent="center"
             sx={{ mb: 6, animation: 'fadeInUp 1s ease-out 0.6s both' }}
           >
-            <Button 
-              variant="contained" 
-              size="large"
-              sx={{ 
-                background: '#007acc',
-                color: '#fff',
-                px: 4,
-                py: 1.8,
-                borderRadius: '12px',
-                fontSize: '16px',
-                fontWeight: 700,
-                textTransform: 'none',
-                boxShadow: '0 8px 30px rgba(0,122,204,0.18)',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-3px)',
-                  boxShadow: '0 12px 40px rgba(0,122,204,0.22)',
-                }
-              }}
-            >
-              Get Started
-            </Button>
+            <SignInButton mode="modal">
+              <Button 
+                variant="contained" 
+                size="large"
+                sx={{ 
+                  background: '#007acc',
+                  color: '#fff',
+                  px: 4,
+                  py: 1.8,
+                  borderRadius: '12px',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  textTransform: 'none',
+                  boxShadow: '0 8px 30px rgba(0,122,204,0.18)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-3px)',
+                    boxShadow: '0 12px 40px rgba(0,122,204,0.22)',
+                  }
+                }}
+              >
+                Get Started
+              </Button>
+            </SignInButton>
             <Button 
               variant="outlined" 
               size="large"
@@ -429,28 +570,30 @@ const Home = () => {
             >
               Move from manual ticket handling to intelligent, automated support workflows.
             </Typography>
-            <Button 
-              variant="contained" 
-              size="large"
-              sx={{ 
-                background: '#007acc',
-                color: '#fff',
-                px: 5,
-                py: 2,
-                borderRadius: '12px',
-                fontSize: '18px',
-                fontWeight: 700,
-                textTransform: 'none',
-                boxShadow: '0 12px 40px rgba(0,122,204,0.18)',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: '0 16px 50px rgba(0,122,204,0.22)',
-                }
-              }}
-            >
-              Login to Platform
-            </Button>
+            <SignInButton mode="modal">
+              <Button 
+                variant="contained" 
+                size="large"
+                sx={{ 
+                  background: '#007acc',
+                  color: '#fff',
+                  px: 5,
+                  py: 2,
+                  borderRadius: '12px',
+                  fontSize: '18px',
+                  fontWeight: 700,
+                  textTransform: 'none',
+                  boxShadow: '0 12px 40px rgba(0,122,204,0.18)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 16px 50px rgba(0,122,204,0.22)',
+                  }
+                }}
+              >
+                Login to Platform
+              </Button>
+            </SignInButton>
           </Box>
         </Box>
       </Container>
