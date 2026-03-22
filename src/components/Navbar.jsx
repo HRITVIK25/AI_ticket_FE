@@ -1,11 +1,36 @@
-import { AppBar, Toolbar, Typography, Button, Box, Container } from '@mui/material'
+import { useState } from 'react'
+import { AppBar, Toolbar, Typography, Button, Box, Container, Menu, MenuItem } from '@mui/material'
 import SmartToyIcon from '@mui/icons-material/SmartToy'
-import { SignInButton, UserButton, useUser } from '@clerk/clerk-react'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { SignInButton, useUser, useAuth } from '@clerk/clerk-react'
 import { useNavigate } from 'react-router-dom'
+import { api } from '../hooks/useAxios'
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser()
+  const { signOut } = useAuth()
   const navigate = useNavigate()
+
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleSignOut = async () => {
+    handleMenuClose()
+    await signOut()
+  }
+
+  const checkHealth = async () => {
+    const res = await api.get("/api/v1/health")
+    console.log(res.data);
+  }
 
   return (
     <AppBar
@@ -68,6 +93,12 @@ const Navbar = () => {
               >
                 Tickets
               </Typography>
+              <Typography
+                onClick={checkHealth}
+                sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
+              >
+                Health Check
+             </Typography>
             </Box>
           )}
 
@@ -75,14 +106,42 @@ const Navbar = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {isSignedIn ? (
               <>
-                <Typography sx={{ fontWeight: 500, color: '#d4d4d4' }}>
-                  {user?.fullName || user?.primaryEmailAddress?.emailAddress || 'User'}
-                </Typography>
-                <UserButton
-                  appearance={{
-                    elements: { avatarBox: { width: '40px', height: '40px' } }
+                <Button 
+                  onClick={handleMenuClick}
+                  endIcon={<KeyboardArrowDownIcon />}
+                  sx={{ 
+                    color: '#d4d4d4', 
+                    textTransform: 'none', 
+                    fontWeight: 500,
+                    fontSize: '15px',
+                    '&:hover': { background: 'rgba(255,255,255,0.05)' }
                   }}
-                />
+                >
+                  {user?.firstName || user?.primaryEmailAddress?.emailAddress || 'User'}
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleMenuClose}
+                  PaperProps={{
+                    sx: {
+                      mt: 1.5,
+                      background: '#252526',
+                      color: '#d4d4d4',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      minWidth: '150px'
+                    }
+                  }}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuItem 
+                    onClick={handleSignOut}
+                    sx={{ '&:hover': { background: 'rgba(255,255,255,0.05)' }, fontWeight: 500, color: '#ff6b6b' }}
+                  >
+                    Sign out
+                  </MenuItem>
+                </Menu>
               </>
             ) : (
               <SignInButton mode="modal">

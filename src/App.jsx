@@ -32,7 +32,6 @@ function App() {
         minHeight: '100vh',
         background: '#1e1e1e',
       }}>
-        <Navbar />
         <Loader />
       </Box>
     );
