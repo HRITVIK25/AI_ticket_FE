@@ -5,9 +5,12 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { SignInButton, useUser, useAuth } from '@clerk/clerk-react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../hooks/useAxios'
+import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const Navbar = () => {
-  const { isSignedIn, user } = useUser()
+  const { isSignedIn } = useUser()
+  const userInfo = useSelector((state) => state.app.userInfo)
   const { signOut } = useAuth()
   const navigate = useNavigate()
 
@@ -28,8 +31,13 @@ const Navbar = () => {
   }
 
   const checkHealth = async () => {
-    const res = await api.get("/api/v1/health")
-    console.log(res.data);
+    try {
+      const res = await api.get("/api/v1/health")
+      toast.success(res.data?.message || "Health check successful!")
+    } catch (error) {
+      toast.error("Health check failed!")
+      console.error(error)
+    }
   }
 
   return (
@@ -117,7 +125,7 @@ const Navbar = () => {
                     '&:hover': { background: 'rgba(255,255,255,0.05)' }
                   }}
                 >
-                  {user?.firstName || user?.primaryEmailAddress?.emailAddress || 'User'}
+                  {userInfo?.firstName || userInfo?.email || 'User'}
                 </Button>
                 <Menu
                   anchorEl={anchorEl}

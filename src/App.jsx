@@ -3,6 +3,11 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { setupInterceptors, api } from "./hooks/useAxios";
+import { useDispatch } from "react-redux";
+import { setUserInfo, clearUserInfo } from "./app/appSlice";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Home from "./components/Home";
 import LandingPage from "./components/LandingPage";
 import Loader from "./components/Loader";
@@ -12,7 +17,23 @@ import TicketDashboard from "./components/Ticket/TicketDashboard";
 
 function App() {
   const { getToken } = useAuth();
-  const { isSignedIn, isLoaded } = useUser();
+  const { isSignedIn, isLoaded, user } = useUser();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isLoaded) {
+      if (isSignedIn && user) {
+        dispatch(setUserInfo({
+          id: user.id,
+          firstName: user.firstName,
+          fullName: user.fullName,
+          email: user.primaryEmailAddress?.emailAddress,
+        }));
+      } else {
+        dispatch(clearUserInfo());
+      }
+    }
+  }, [isLoaded, isSignedIn, user, dispatch]);
 
   useEffect(() => {
     // Setup the interceptor to attach Clerk Bearer token
@@ -47,6 +68,7 @@ function App() {
       position: 'relative',
       overflow: 'hidden',
     }}>
+      <ToastContainer theme="dark" position="bottom-right" />
       <Navbar />
       <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Routes>
