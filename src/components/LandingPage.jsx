@@ -95,60 +95,6 @@ const LandingPage = () => {
             Automate ticket responses, improve response times, and help support teams resolve issues faster with real intelligence.
           </Typography>
 
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={2}
-            justifyContent="center"
-            sx={{ mb: 6, animation: 'fadeInUp 1s ease-out 0.6s both' }}
-          >
-            <SignInButton mode="modal">
-              <Button
-                variant="contained"
-                size="large"
-                sx={{
-                  background: '#007acc',
-                  color: '#fff',
-                  px: 4,
-                  py: 1.8,
-                  borderRadius: '12px',
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  textTransform: 'none',
-                  boxShadow: '0 8px 30px rgba(0,122,204,0.18)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-3px)',
-                    boxShadow: '0 12px 40px rgba(0,122,204,0.22)',
-                  }
-                }}
-              >
-                Get Started
-              </Button>
-            </SignInButton>
-            <Button
-              variant="outlined"
-              size="large"
-              sx={{
-                color: '#d4d4d4',
-                borderColor: 'rgba(212,212,212,0.06)',
-                px: 4,
-                py: 1.8,
-                borderRadius: '12px',
-                fontSize: '16px',
-                fontWeight: 600,
-                textTransform: 'none',
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  borderColor: 'rgba(0,122,204,0.18)',
-                  background: 'rgba(0,122,204,0.06)',
-                  transform: 'translateY(-3px)',
-                }
-              }}
-            >
-              View Dashboard
-            </Button>
-          </Stack>
 
           {/* Feature pills */}
           <Grid
