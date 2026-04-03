@@ -30,10 +30,17 @@ export const appSlice = createSlice({
     },
     setKnowledgeBases: (state, action) => {
       state.knowledgeBases = action.payload;
+    },
+    updateTicket: (state, action) => {
+      const updated = action.payload;
+      const idx = state.tickets.findIndex((t) => t.id === updated.id);
+      if (idx !== -1) {
+        state.tickets[idx] = { ...state.tickets[idx], ...updated };
+      }
     }
   },
 })
 
-export const { setUserInfo, clearUserInfo, addTicket, setTickets, addKnowledgeBase, setKnowledgeBases } = appSlice.actions
+export const { setUserInfo, clearUserInfo, addTicket, setTickets, updateTicket, addKnowledgeBase, setKnowledgeBases } = appSlice.actions
 
 export default appSlice.reducer
