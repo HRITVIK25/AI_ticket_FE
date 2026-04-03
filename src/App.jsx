@@ -3,7 +3,7 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { setupInterceptors, api } from "./hooks/useAxios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserInfo, clearUserInfo, setKnowledgeBases } from "./app/appSlice";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,26 +14,46 @@ import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
 import KnowledgeBaseDashboard from "./components/KnowledgeBase/KnowledgeBaseDashboard";
 import TicketDashboard from "./components/Ticket/TicketDashboard";
+import OpenTickets from "./components/Ticket/OpenTickets";
 
 function App() {
   const { getToken } = useAuth();
   const { isSignedIn, isLoaded, user } = useUser();
   const dispatch = useDispatch();
+  const isAdmin = useSelector((state) => state.app.userInfo?.role === 'ticket_admin');
+
+  // Decode JWT payload without a library (claims are public, not secret-bearing)
+  const decodeJwtPayload = (token) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64));
+    } catch {
+      return null;
+    }
+  };
 
   useEffect(() => {
     if (isLoaded) {
       if (isSignedIn && user) {
-        dispatch(setUserInfo({
-          id: user.id,
-          firstName: user.firstName,
-          fullName: user.fullName,
-          email: user.primaryEmailAddress?.emailAddress,
-        }));
+        // Fetch token to extract org role from o.rol
+        getToken().then((token) => {
+          const claims = token ? decodeJwtPayload(token) : null;
+          const role = claims?.o?.rol || null;
+          console.log("role: ",role)
+          dispatch(setUserInfo({
+            id: user.id,
+            firstName: user.firstName,
+            fullName: user.fullName,
+            email: user.primaryEmailAddress?.emailAddress,
+            role, // e.g. 'ticket_admin'
+          }));
+        });
       } else {
         dispatch(clearUserInfo());
       }
     }
-  }, [isLoaded, isSignedIn, user, dispatch]);
+  }, [isLoaded, isSignedIn, user, dispatch, getToken]);
 
   useEffect(() => {
     // Setup the interceptor to attach Clerk Bearer token
@@ -110,12 +130,17 @@ function App() {
           {/* Ticket routes */}
           <Route 
             path="/tickets" 
-            element={isSignedIn ? <TicketDashboard /> : <Navigate to="/" replace />} 
+            element={isSignedIn && !isAdmin ? <TicketDashboard /> : <Navigate to={isSignedIn ? '/home' : '/'} replace />} 
           />
 
-          
+          {/* Open Tickets — admin only */}
+          <Route 
+            path="/open-tickets" 
+            element={isSignedIn && isAdmin ? <OpenTickets /> : <Navigate to={isSignedIn ? '/home' : '/'} replace />} 
+          />
+
           {/* Catch-all fallback */}
-          <Route path="*" element={<Navigate to={isSignedIn ? "/home" : "/"} replace />} />
+          <Route path="*" element={<Navigate to={isSignedIn ? '/home' : '/'} replace />} />
         </Routes>
       </Box>
     </Box>

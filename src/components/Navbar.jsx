@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 const Navbar = () => {
   const { isSignedIn } = useUser()
   const userInfo = useSelector((state) => state.app.userInfo)
+  const isAdmin = userInfo?.role === 'ticket_admin'
   const { signOut } = useAuth()
   const navigate = useNavigate()
 
@@ -88,24 +89,38 @@ const Navbar = () => {
               >
                 Dashboard
               </Typography>
-              <Typography 
-                onClick={() => navigate('/knowledge-bases')}
-                sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
-              >
-                Knowledge Bases
-              </Typography>
-              <Typography 
-                onClick={() => navigate('/tickets')}
-                sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
-              >
-                Tickets
-              </Typography>
-              <Typography
-                onClick={checkHealth}
-                sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
-              >
-                Health Check
-             </Typography>
+              {isAdmin && (
+                <Typography 
+                  onClick={() => navigate('/knowledge-bases')}
+                  sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
+                >
+                  Knowledge Bases
+                </Typography>
+              )}
+              {!isAdmin && (
+                <Typography 
+                  onClick={() => navigate('/tickets')}
+                  sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
+                >
+                  Tickets
+                </Typography>
+              )}
+              {isAdmin && (
+                <Typography 
+                  onClick={() => navigate('/open-tickets')}
+                  sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
+                >
+                  Open Tickets
+                </Typography>
+              )}
+              {isAdmin && (
+                <Typography
+                  onClick={checkHealth}
+                  sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
+                >
+                  Health Check
+                </Typography>
+              )}
             </Box>
           )}
 
