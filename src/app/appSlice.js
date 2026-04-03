@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   userInfo: null,
-  tickets: [] // Will be populated from GET API
+  tickets: [], // Will be populated from GET API
+  knowledgeBases: [] // Will be populated from GET API
 }
 
 export const appSlice = createSlice({
@@ -23,10 +24,16 @@ export const appSlice = createSlice({
     setTickets: (state, action) => {
       // eslint-disable-next-line no-unused-vars
       state.tickets = action.payload.map(({ updated_at, ...ticketData }) => ticketData);
+    },
+    addKnowledgeBase: (state, action) => {
+      state.knowledgeBases.unshift(action.payload);
+    },
+    setKnowledgeBases: (state, action) => {
+      state.knowledgeBases = action.payload;
     }
   },
 })
 
-export const { setUserInfo, clearUserInfo, addTicket, setTickets } = appSlice.actions
+export const { setUserInfo, clearUserInfo, addTicket, setTickets, addKnowledgeBase, setKnowledgeBases } = appSlice.actions
 
 export default appSlice.reducer

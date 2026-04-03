@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { setupInterceptors, api } from "./hooks/useAxios";
 import { useDispatch } from "react-redux";
-import { setUserInfo, clearUserInfo } from "./app/appSlice";
+import { setUserInfo, clearUserInfo, setKnowledgeBases } from "./app/appSlice";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -44,6 +44,22 @@ function App() {
       api.interceptors.request.eject(interceptorId);
     };
   }, [getToken]);
+
+  useEffect(() => {
+    if (isSignedIn && isLoaded) {
+      const fetchKnowledgeBases = async () => {
+        try {
+          const response = await api.get('api/v1/kb/all');
+          if (Array.isArray(response.data)) {
+            dispatch(setKnowledgeBases(response.data));
+          }
+        } catch (err) {
+          console.error('Failed to fetch knowledge bases globally:', err);
+        }
+      };
+      fetchKnowledgeBases();
+    }
+  }, [isSignedIn, isLoaded, dispatch]);
 
   if (!isLoaded) {
     return (

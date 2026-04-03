@@ -207,18 +207,34 @@ const TicketDashboard = () => {
 
                     {/* Status + Button row */}
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
-                      <Chip 
-                        label={ticket.status || 'CREATED'} 
-                        size="small" 
-                        sx={{ 
-                          bgcolor: 'rgba(59, 130, 246, 0.12)', 
-                          color: '#60a5fa', 
-                          border: '1px solid rgba(59, 130, 246, 0.25)',
-                          fontWeight: 700,
-                          fontSize: '0.7rem',
-                          letterSpacing: '0.5px',
-                        }} 
-                      />
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                        <Chip 
+                          label={ticket.status || 'CREATED'} 
+                          size="small" 
+                          sx={{ 
+                            bgcolor: 'rgba(59, 130, 246, 0.12)', 
+                            color: '#60a5fa', 
+                            border: '1px solid rgba(59, 130, 246, 0.25)',
+                            fontWeight: 700,
+                            fontSize: '0.7rem',
+                            letterSpacing: '0.5px',
+                          }} 
+                        />
+                        {ticket.tag && (
+                          <Chip 
+                            label={ticket.tag} 
+                            size="small" 
+                            sx={{ 
+                              bgcolor: 'rgba(16, 185, 129, 0.12)', 
+                              color: '#34d399', 
+                              border: '1px solid rgba(16, 185, 129, 0.25)',
+                              fontWeight: 700,
+                              fontSize: '0.7rem',
+                              letterSpacing: '0.5px',
+                            }} 
+                          />
+                        )}
+                      </Box>
                       <Button 
                         variant="outlined"
                         size="small"
@@ -301,14 +317,21 @@ const TicketDashboard = () => {
 
                 <Box>
                   <Typography variant="caption" sx={{ color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
-                    Status
+                    Status & Tag
                   </Typography>
-                  <Box sx={{ mt: 0.75 }}>
+                  <Box sx={{ mt: 0.75, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                     <Chip 
                       label={selectedTicket.status} 
                       size="small" 
                       sx={{ bgcolor: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', fontWeight: 700, border: '1px solid rgba(59,130,246,0.3)' }} 
                     />
+                    {selectedTicket.tag && (
+                      <Chip 
+                        label={selectedTicket.tag} 
+                        size="small" 
+                        sx={{ bgcolor: 'rgba(16, 185, 129, 0.15)', color: '#34d399', fontWeight: 700, border: '1px solid rgba(16,185,129,0.3)' }} 
+                      />
+                    )}
                   </Box>
                 </Box>
 

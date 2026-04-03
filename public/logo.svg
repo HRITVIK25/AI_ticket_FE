@@ -1,0 +1,24 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" rx="40" fill="#0B1220"/>
+
+  <!-- Ticket Shape -->
+  <path d="M60 70 H140 Q145 70 145 75 V125 Q145 130 140 130 H60 Q55 130 55 125 V105 
+           Q65 100 65 90 Q65 80 55 75 V75 Q55 70 60 70 Z"
+        fill="#1E293B"/>
+
+  <!-- AI Flow Line -->
+  <path d="M75 100 C90 80, 110 120, 125 100"
+        stroke="#38BDF8"
+        stroke-width="3"
+        fill="none"
+        stroke-linecap="round"/>
+
+  <!-- Nodes -->
+  <circle cx="75" cy="100" r="4" fill="#38BDF8"/>
+  <circle cx="100" cy="90" r="4" fill="#38BDF8"/>
+  <circle cx="125" cy="100" r="4" fill="#38BDF8"/>
+
+  <!-- Accent notch -->
+  <rect x="95" y="70" width="10" height="8" fill="#22C55E"/>
+</svg>
