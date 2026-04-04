@@ -8,7 +8,7 @@ import { keyframes } from '@mui/system';
 import { setTickets, updateTicket } from '../../app/appSlice';
 import { api } from '../../hooks/useAxios';
 import TicketList from './TicketList';
-import TicketDetailModal from './TicketDetailModal';
+import TicketDetailModal from "./TicketDetailModal";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(15px); }
@@ -171,6 +171,7 @@ const OpenTickets = () => {
           open={!!selectedTicket}
           onClose={() => setSelectedTicket(null)}
           onTicketUpdated={handleTicketUpdated}
+          isAdmin={true}
         />
         
       </Container>
