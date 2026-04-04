@@ -1,29 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, CircularProgress, Typography
+  Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, CircularProgress, Typography, MenuItem
 } from '@mui/material';
 import { api } from '../../hooks/useAxios';
 import { toast } from 'react-toastify';
 
 const CreateTicket = ({ open, onClose, onTicketCreated }) => {
-  const [newTicket, setNewTicket] = useState({ title: '', description: '' });
-  const [errors, setErrors] = useState({ title: false, description: false });
+  const [newTicket, setNewTicket] = useState({ title: '', description: '', tag: '' });
+  const [errors, setErrors] = useState({ title: false, description: false, tag: false });
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
+  const [tags, setTags] = useState([]);
+  const [loadingTags, setLoadingTags] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      const fetchTags = async () => {
+        setLoadingTags(true);
+        try {
+          const res = await api.get('api/v1/kb/tags');
+          if (Array.isArray(res.data)) {
+            setTags(res.data.map(t => typeof t === 'string' ? t : (t.tag || t.name)));
+          }
+        } catch (err) {
+          console.error("Failed to fetch tags:", err);
+        } finally {
+          setLoadingTags(false);
+        }
+      };
+      fetchTags();
+    }
+  }, [open]);
 
   const handleClose = () => {
     onClose();
-    setNewTicket({ title: '', description: '' });
-    setErrors({ title: false, description: false });
+    setNewTicket({ title: '', description: '', tag: '' });
+    setErrors({ title: false, description: false, tag: false });
     setApiError('');
   };
 
   const handleCreate = async () => {
     const titleError = !newTicket.title.trim();
     const descError = !newTicket.description.trim();
+    const tagError = !newTicket.tag.trim();
     
-    if (titleError || descError) {
-      setErrors({ title: titleError, description: descError });
+    if (titleError || descError || tagError) {
+      setErrors({ title: titleError, description: descError, tag: tagError });
       return;
     }
 
@@ -33,7 +55,8 @@ const CreateTicket = ({ open, onClose, onTicketCreated }) => {
     try {
       const response = await api.post('api/v1/tickets/', {
         title: newTicket.title,
-        description: newTicket.description
+        description: newTicket.description,
+        tag: newTicket.tag
       });
       
       // Pass the returned ticket from the API
@@ -147,6 +170,46 @@ const CreateTicket = ({ open, onClose, onTicketCreated }) => {
               }
             }}
           />
+
+          <TextField
+            select
+            label="Tag"
+            fullWidth
+            required
+            variant="outlined"
+            value={newTicket.tag}
+            onChange={(e) => {
+              setNewTicket({ ...newTicket, tag: e.target.value });
+              if (e.target.value.trim()) setErrors({ ...errors, tag: false });
+            }}
+            error={errors.tag}
+            helperText={errors.tag ? "Tag is required" : ""}
+            InputLabelProps={{ style: { color: '#94a3b8' } }}
+            disabled={loading || loadingTags}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                color: '#f1f5f9',
+                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.4)' },
+                '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+              },
+              '& .Mui-disabled': {
+                color: 'rgba(241, 245, 249, 0.5)',
+                WebkitTextFillColor: 'rgba(241, 245, 249, 0.5)'
+              },
+              '& .MuiSvgIcon-root': { color: '#94a3b8' }
+            }}
+          >
+            {tags.length === 0 ? (
+              <MenuItem value="" disabled>No tags available</MenuItem>
+            ) : (
+              tags.map((tag) => (
+                <MenuItem key={tag} value={tag}>
+                  {tag}
+                </MenuItem>
+              ))
+            )}
+          </TextField>
         </Box>
       </DialogContent>
       <DialogActions sx={{ p: 3, px: 4, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>

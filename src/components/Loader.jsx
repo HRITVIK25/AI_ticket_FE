@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material'
-import SmartToyIcon from '@mui/icons-material/SmartToy'
 
 const Loader = ({ message = 'Loading...' }) => {
   return (
@@ -55,13 +54,13 @@ const Loader = ({ message = 'Loading...' }) => {
         />
         {/* Icon box */}
         <Box
+          component="img"
+          src="/logo.svg"
+          alt="Loading"
           sx={{
-            background: '#007acc',
+            width: 56,
+            height: 56,
             borderRadius: '14px',
-            p: 1.5,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             boxShadow: '0 0 0 1px rgba(0,122,204,0.2)',
             animation: 'iconPulse 2s ease-in-out infinite',
             '@keyframes iconPulse': {
@@ -69,9 +68,7 @@ const Loader = ({ message = 'Loading...' }) => {
               '50%': { transform: 'scale(1.06)' },
             },
           }}
-        >
-          <SmartToyIcon sx={{ fontSize: 32, color: '#fff' }} />
-        </Box>
+        />
       </Box>
 
       {/* Segmented progress bar */}

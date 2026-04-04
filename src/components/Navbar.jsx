@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { AppBar, Toolbar, Typography, Button, Box, Container, Menu, MenuItem } from '@mui/material'
-import SmartToyIcon from '@mui/icons-material/SmartToy'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { SignInButton, useUser, useAuth } from '@clerk/clerk-react'
 import { useNavigate } from 'react-router-dom'
@@ -11,6 +10,7 @@ import { toast } from 'react-toastify'
 const Navbar = () => {
   const { isSignedIn } = useUser()
   const userInfo = useSelector((state) => state.app.userInfo)
+  const isAdmin = userInfo?.role === 'ticket_admin'
   const { signOut } = useAuth()
   const navigate = useNavigate()
 
@@ -64,17 +64,17 @@ const Navbar = () => {
               cursor: 'pointer' 
             }}
           >
-            <Box sx={{
-              background: '#007acc',
-              borderRadius: '8px',
-              p: 0.8,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(0,122,204,0.25)'
-            }}>
-              <SmartToyIcon sx={{ fontSize: 26, color: '#fff' }} />
-            </Box>
+            <Box
+              component="img"
+              src="/logo.svg"
+              alt="AI Ticketing Logo"
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: '10px',
+                boxShadow: '0 4px 12px rgba(0,122,204,0.25)',
+              }}
+            />
             <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '22px', letterSpacing: '-0.5px', color: '#d4d4d4' }}>
               AI Ticketing
             </Typography>
@@ -89,24 +89,38 @@ const Navbar = () => {
               >
                 Dashboard
               </Typography>
-              <Typography 
-                onClick={() => navigate('/knowledge-bases')}
-                sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
-              >
-                Knowledge Bases
-              </Typography>
-              <Typography 
-                onClick={() => navigate('/tickets')}
-                sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
-              >
-                Tickets
-              </Typography>
-              <Typography
-                onClick={checkHealth}
-                sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
-              >
-                Health Check
-             </Typography>
+              {isAdmin && (
+                <Typography 
+                  onClick={() => navigate('/knowledge-bases')}
+                  sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
+                >
+                  Knowledge Bases
+                </Typography>
+              )}
+              {!isAdmin && (
+                <Typography 
+                  onClick={() => navigate('/tickets')}
+                  sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
+                >
+                  Tickets
+                </Typography>
+              )}
+              {isAdmin && (
+                <Typography 
+                  onClick={() => navigate('/open-tickets')}
+                  sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
+                >
+                  Open Tickets
+                </Typography>
+              )}
+              {isAdmin && (
+                <Typography
+                  onClick={checkHealth}
+                  sx={{ cursor: 'pointer', fontWeight: 500, color: '#d4d4d4', '&:hover': { color: '#007acc' }, transition: 'color 0.2s' }}
+                >
+                  Health Check
+                </Typography>
+              )}
             </Box>
           )}
 

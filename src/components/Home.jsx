@@ -22,8 +22,8 @@ const Dashboard = () => {
   const userName = userInfo?.firstName || userInfo?.fullName || userInfo?.username || 'Guest'
 
   const tickets = useSelector((state) => state.app?.tickets || [])
-  const openTickets = tickets.filter(t => t.status !== 'RESOLVED' && t.status !== 'CLOSED').length
-  const resolvedTickets = tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length
+  const openTickets = tickets.filter(t => t.status !== 'CLOSED').length
+  const resolvedTickets = tickets.filter(t => t.status === 'CLOSED').length
 
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)

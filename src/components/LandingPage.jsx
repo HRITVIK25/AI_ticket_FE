@@ -1,5 +1,4 @@
 import { Typography, Button, Box, Container, Grid, Card, CardContent, Stack } from '@mui/material'
-import SmartToyIcon from '@mui/icons-material/SmartToy'
 import SpeedIcon from '@mui/icons-material/Speed'
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
@@ -22,7 +21,20 @@ const LandingPage = () => {
           pb: { xs: 8, md: 12 },
           textAlign: 'center'
         }}>
-          {/* Badge */}
+          {/* Logo + Badge */}
+          <Box sx={{ mb: 3, animation: 'fadeInUp 0.6s ease-out' }}>
+            <Box
+              component="img"
+              src="/logo.svg"
+              alt="AI Ticketing Logo"
+              sx={{
+                width: 80,
+                height: 80,
+                borderRadius: '20px',
+                boxShadow: '0 8px 32px rgba(0,122,204,0.3)',
+              }}
+            />
+          </Box>
           <Box
             sx={{
               display: 'inline-flex',
@@ -183,7 +195,7 @@ const LandingPage = () => {
           <Grid container spacing={3}>
             {[
               {
-                icon: <SmartToyIcon sx={{ fontSize: 40, color: '#9ccfff' }} />,
+                icon: <Box component="img" src="/logo.svg" alt="AI" sx={{ width: 40, height: 40, borderRadius: '8px' }} />,
                 title: 'AI Auto Replies',
                 desc: 'Context-aware responses generated using internal knowledge base.'
               },
