@@ -16,9 +16,9 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SendIcon from "@mui/icons-material/Send";
 import { api } from "../../hooks/useAxios";
 // ─────────────────────────────────────────────
-// TicketDetailModal — displays ticket details and chat
+// TicketDetail — displays ticket details and chat
 // ─────────────────────────────────────────────
-const TicketDetailModal = ({
+const TicketDetail = ({
   ticket: initialTicket,
   open,
   onClose,
@@ -803,4 +803,4 @@ const TicketDetailModal = ({
   );
 };
 
-export default TicketDetailModal;
+export default TicketDetail;
