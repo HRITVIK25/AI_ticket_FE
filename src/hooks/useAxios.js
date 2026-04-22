@@ -4,7 +4,7 @@ import axios from "axios";
  * Create a single axios instance for your backend
  */
 export const api = axios.create({
-  baseURL: import.meta.env.REACT_BASE_URL || "http://127.0.0.1:8000/", // FastAPI backend
+  baseURL: import.meta.env.VITE_BASE_URL || "http://127.0.0.1:8000/", // FastAPI backend
 });
 
 /**
